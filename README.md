@@ -13,7 +13,21 @@ Internal SEO audit platform for automated crawling, technical SEO checks, perfor
 
 See `docs/architecture.md` for full module boundaries and data flow.
 
-## Quick Start
+## Will this run on Vercel?
+
+**Partially.**
+
+- ✅ `frontend/` can be deployed to Vercel.
+- ⚠️ Full platform cannot run on Vercel alone because this project requires persistent worker processes (BullMQ), Redis, PostgreSQL, scheduling, and Playwright crawler jobs.
+
+Use a split deployment:
+- Vercel for frontend
+- Container platform for API + worker
+- Managed Postgres + Redis
+
+See `docs/vercel.md`.
+
+## Quick Start (Local)
 
 ### 1) Prerequisites
 - Docker + Docker Compose
@@ -24,20 +38,31 @@ See `docs/architecture.md` for full module boundaries and data flow.
 cp .env.example .env
 ```
 
-### 3) Run with Docker
+### 3) Run full stack with Docker (recommended)
 ```bash
 docker compose up --build
 ```
 
-### 4) Local development
+Services:
+- Frontend: `http://localhost:5173`
+- API: `http://localhost:4000/api/health`
+- Postgres: `localhost:5432`
+- Redis: `localhost:6379`
+
+### 4) Run locally without Docker (advanced)
+Start Postgres + Redis first, then:
 ```bash
-# Backend
+# terminal 1: backend API
 cd backend
 npm install
 npm run dev
 
-# Frontend
-cd ../frontend
+# terminal 2: worker
+cd backend
+npm run worker
+
+# terminal 3: frontend
+cd frontend
 npm install
 npm run dev
 ```
@@ -53,7 +78,7 @@ cd ../frontend && npm test
 
 - Build containers using `docker compose build`
 - Push images to your registry
-- Deploy API/worker/web to AWS ECS, EKS, or DigitalOcean Apps
+- Deploy API/worker/web to AWS ECS, EKS, Render, Railway, Fly.io, or DigitalOcean Apps
 - Configure `REDIS_URL`, `DATABASE_URL`, and API keys in secrets manager
 
 Detailed deployment guidance in `docs/deployment.md`.

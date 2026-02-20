@@ -3,10 +3,13 @@ import React from 'react';
 type ScoreCardProps = { score: number };
 
 export function ScoreCard({ score }: ScoreCardProps) {
+  const label = score >= 85 ? 'Excellent' : score >= 70 ? 'Good' : 'Needs work';
+
   return (
-    <div style={{ padding: 16, border: '1px solid #ddd', borderRadius: 12 }}>
-      <h3>SEO Health Score</h3>
-      <p style={{ fontSize: 28, fontWeight: 700 }}>{score}/100</p>
-    </div>
+    <section className="glass card">
+      <p className="muted" style={{ margin: 0 }}>SEO Health Score</p>
+      <p className="score">{score}/100</p>
+      <span className="pill">{label}</span>
+    </section>
   );
 }

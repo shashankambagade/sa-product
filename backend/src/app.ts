@@ -13,6 +13,10 @@ export function buildApp() {
 
   app.use('/api', router);
 
+  app.use((_req, res) => {
+    res.status(404).json({ message: 'Not found' });
+  });
+
   app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     res.status(500).json({ message: err.message || 'Internal server error' });
   });

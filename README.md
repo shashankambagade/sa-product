@@ -2,14 +2,23 @@
 
 Internal SEO audit platform for automated crawling, technical SEO checks, performance tracking, keyword rank history, and report generation for internal client operations.
 
+## What is production-ready in this baseline
+
+- Modular backend API, worker, and queue architecture
+- PostgreSQL schema with constraints and indexes
+- Auth + protected routes + request validation
+- Queue-based crawling/scheduling flow
+- Frontend dashboard with modern glassmorphism UI foundation
+- Dockerized local stack + CI workflow
+
 ## Architecture Summary
 
-- **Frontend**: React + Vite + TypeScript + Recharts + TailwindCSS
+- **Frontend**: React + Vite + TypeScript + Recharts
 - **Backend API**: Node.js + Express + TypeScript + PostgreSQL + BullMQ
-- **Workers**: BullMQ queues for crawl, performance checks, and report generation
+- **Workers**: BullMQ workers for crawl and performance jobs
 - **Database**: PostgreSQL schema in `database/schema.sql`
 - **Scheduler**: repeatable jobs managed by BullMQ
-- **Observability**: structured logging with pino and request IDs
+- **Observability**: pino + pino-http logging
 
 See `docs/architecture.md` for full module boundaries and data flow.
 
@@ -26,6 +35,43 @@ Use a split deployment:
 - Managed Postgres + Redis
 
 See `docs/vercel.md`.
+
+## Complete dependency list
+
+### Backend runtime dependencies
+- axios
+- bcryptjs
+- bullmq
+- cors
+- dotenv
+- express
+- helmet
+- ioredis
+- jsonwebtoken
+- pg
+- pino
+- pino-http
+- playwright
+- zod
+
+### Backend dev dependencies
+- @types/* for node/express/jwt/pg/jest/bcryptjs
+- jest + ts-jest + supertest
+- tsx
+- typescript
+
+### Frontend runtime dependencies
+- react
+- react-dom
+- axios
+- recharts
+
+### Frontend dev dependencies
+- vite
+- @vitejs/plugin-react
+- typescript
+- vitest
+- @types/react + @types/react-dom
 
 ## Quick Start (Local)
 
@@ -66,6 +112,18 @@ cd frontend
 npm install
 npm run dev
 ```
+
+## API endpoints (implemented)
+
+- `POST /api/auth/login`
+- `GET /api/projects?organizationId=<uuid>`
+- `POST /api/projects`
+- `POST /api/audits`
+- `POST /api/schedules`
+- `GET /api/reports/:projectId`
+- `GET /api/health`
+
+Detailed API payloads in `docs/api.md`.
 
 ## Testing
 
